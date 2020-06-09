@@ -1,9 +1,8 @@
 /*
-  3.1 ╫╨д╝╤С ╣╔юлем е╦ют
-   - юо╧щ ╢эюо ╣╔юлеме╦ют ╨╞╪Ж , %Type ╣╔юлемгЭ ╨╞╪Ж
-   
-   3.2 ╨╧гу╣╔юлем е╦ют
-   
+  3.1 Л┼╓Л╧╪К²╪ К█╟Л²╢М└╟ М┐─Л·┘
+   - Л²╪К╟≤ К▀╗Л²╪ К█╟Л²╢М└╟М┐─Л·┘ КЁ─Л┬≤ , %Type К█╟Л²╢М└╟М≤∙ КЁ─Л┬≤
+   3.2 КЁ╣М∙╘К█╟Л²╢М└╟ М┐─Л·┘
+    - PL/SQLМ┘▄Л²╢К╦■ЙЁ╪ К═┬Л╫■К⌠°, %ROWTYPE
 */
 
 Select *  from ALL_TAB_COLUMNS where TABLE_NAME = 'USERS';
@@ -12,7 +11,7 @@ SELECT * FROM USERS;
 CREATE OR REPLACE PROCEDURE USERS_PRINT
 (P_ID IN USERS.ID%TYPE)
 IS
---%TYPE ╣╔юлемгЭ ╨╞╪Ж ╪╠╬П
+--%TYPE К█╟Л²╢М└╟М≤∙ КЁ─Л┬≤ Л└═Л√╦
 V_ID USERS.ID%TYPE;
 V_NAME USERS.NAME%TYPE;
 V_PASSWORD USERS.PASSWORD%TYPE;
@@ -22,25 +21,55 @@ BEGIN
  
  DBMS_OUTPUT.ENABLE;
  
- --%TYPE ╣╔юлемгЭ ╨╞╪Ж ╩Г©К
+ --%TYPE К█╟Л²╢М└╟М≤∙ КЁ─Л┬≤ Л┌╛Л ╘
  SELECT ID,NAME,PASSWORD, EMAIL
  INTO V_ID,V_NAME,V_PASSWORD, V_EMAIL
  FROM   USERS
  WHERE ID = P_ID;
  
- --╟А╟З╟╙ цБ╥б
+ --Й╡╟ЙЁ╪Й╟▓ Л╤°К═╔
  DBMS_OUTPUT.PUT_LINE('ID : ' || V_ID);
  DBMS_OUTPUT.PUT_LINE('NAME : ' || V_NAME);
  DBMS_OUTPUT.PUT_LINE('PASSWORD : ' || V_PASSWORD);
  DBMS_OUTPUT.PUT_LINE('EMAIL : ' || V_EMAIL);
  END;
 /
--- DBMS_OUTPUT ╟А╟З╟╙ю╩ х╜╦И©║ цБ╥бго╠Б ю╖гь
+-- DBMS_OUTPUT Й╡╟ЙЁ╪Й╟▓Л²└ М≥■К╘╢Л≈░ Л╤°К═╔М∙≤Й╦╟ Л°└М∙╢
 SET SERVEROUTPUT ON;
 EXECUTE USERS_PRINT('green');
 
 
+/* КЁ╣М∙╘ К█╟Л²╢М└╟ М┐─Л·┘
+    - М∙≤К┌≤ Л²╢Л┐│Л²≤ К█╟Л²╢М└╟Й╟▓Л²└ Й╟√К┼■ К█╟Л²╢М└╟ М┐─Л·┘Л°╪К║° К╟╟Л≈╢ЙЁ╪ К╧└Л┼╥М∙° Л≈╜М∙═Л²└ М∙≤ЙЁ═ Л·╛Л┌╛Л ╘Л²╢ Й╟─К┼╔
+    - %ROWTYPE, PL/SQL М┘▄Л²╢К╦■ЙЁ╪ К═┬Л╫■К⌠° 
+*/
+
+create or replace procedure rowType_test
+(p_id in users.id%type)
+is
+-- %ROWTYPE КЁ─Л┬≤Л└═Л√╦,
+-- users М┘▄Л²╢К╦■Л²≤ Л├█Л└╠Л²└ Й╥╦К▄─К║° Л┌╛Л ╘М∙═ Л┬≤ Л·┬К▀╓.
+v_users users%ROWTYPE;
+
+begin
+    dbms_output.enable;
+    
+    select id, name,password,login, recommend, email
+    into v_users.id, v_users.name, v_users.password, v_users.login, v_users.recommend, v_users.email
+    from users
+    where id = p_id;
+    
+    DBMS_OUTPUT.PUT_LINE('ID : ' || v_users.id);
+    DBMS_OUTPUT.PUT_LINE('NAME : ' || v_users.name);
+    DBMS_OUTPUT.PUT_LINE('PASSWORD : ' || v_users.password);
+    DBMS_OUTPUT.PUT_LINE('EMAIL : ' || v_users.email);
+ end;
+/
+
+set serveroutput on;
+execute rowtype_test('bumjin');
 
 
+select * from users;
 
 
