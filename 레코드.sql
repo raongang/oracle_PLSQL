@@ -12,7 +12,7 @@ CREATE OR REPLACE PROCEDURE RECORD_TEST
 IS
  --하나의 레코드의 세가지의 변수타입 선언
   TYPE USERS_RECORD IS RECORD
-  ( V_ID NUMBER,
+  ( V_ID VARCHAR2(10),
     V_NAME VARCHAR2(30),
     V_LOGIN NUMBER);
     
@@ -20,6 +20,20 @@ IS
 
 BEGIN
 
+    DBMS_OUTPUT.ENABLE;
+    --레코드 사용
+    SELECT ID, NAME,LOGIN 
+    INTO USERS_REC.V_ID, USERS_REC.V_NAME, USERS_REC.V_LOGIN
+    FROM USERS
+    WHERE ID = P_ID;
+    
+    dbms_output.put_line('아아디 : ' || USERS_REC.V_ID);
+    dbms_output.put_line('이름 : ' ||   USERS_REC.V_NAME);
+    dbms_output.put_line('로그인횟수 : ' ||  USERS_REC.V_LOGIN);
+    
 END;
 /
+
+set serveroutput on;
+execute record_test('bumjin');
 
